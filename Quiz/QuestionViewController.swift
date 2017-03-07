@@ -9,14 +9,21 @@
 import UIKit
 
 class QuestionViewController: UIViewController {
-    
+
     let question = UILabel(frame: CGRect(x: 40,y: 60,width: 343, height: 75))
     let rep1 = UIButton(frame: CGRect(x: 40,y: 200,width: 343, height: 50))
     let rep2 = UIButton(frame: CGRect(x: 40, y: 300, width: 343, height: 50))
     let rep3 = UIButton(frame: CGRect(x:40, y: 400, width: 343, height: 50))
     let rep4 = UIButton(frame: CGRect(x: 40, y: 500, width: 343, height: 50))
     
+    let time = UILabel(frame: CGRect(x: 190, y: 140, width: 343, height: 25))
+    
+    var tempsRestant = 10
+    
     var reponseCorrecte: String = ""
+    
+    var myTime: Timer!
+    var score:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +33,14 @@ class QuestionViewController: UIViewController {
         let screenWidth = screenSize.width
         let screenHeight = screenSize.height
         
+        time.textColor = UIColor.white
+        
 
         self.navigationItem.title = "Question:"
        // Do any additional setup after loading the view.
         
+        myTime = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(QuestionViewController.timer), userInfo: nil, repeats: true)
+
         randomQuestion()
         
        rep1.addTarget(self, action: #selector(reponse1), for: .touchUpInside)
@@ -42,6 +53,8 @@ class QuestionViewController: UIViewController {
         self.view.addSubview(rep3)
         self.view.addSubview(rep4)
         
+        self.view.addSubview(time)
+        
         self.view.addSubview(question)
 
         view.backgroundColor = UIColor.black
@@ -52,7 +65,27 @@ class QuestionViewController: UIViewController {
         // Dispose of any resources that can be recreated.
         
     }
+    //Timer
+    func timer(){
+        
+        tempsRestant -= 1
+        time.text = "\(tempsRestant)"
+        
+        
+    if tempsRestant == 0
+        {
+            myTime.invalidate()
+            
+            var alert:UIAlertView = UIAlertView(title: "Plus de temps", message: "le temps est écoulé !!!",delegate: self, cancelButtonTitle: "OK")
+            alert.show()
+            
+            time.text = "0"
+            
+        }
+        
+    }
     
+    //Question random
     func randomQuestion(){
         
         
@@ -182,11 +215,14 @@ class QuestionViewController: UIViewController {
         }
     }
     
+    //Action des 4 boutons
     func reponse1 (sender: UIButton!){
+        
+        score = tempsRestant + 10
         
         if reponseCorrecte == "1"
         {
-          var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+          var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
             
             alert.show()
             
@@ -201,9 +237,11 @@ class QuestionViewController: UIViewController {
 
     func reponse2 (sender: UIButton!){
         
+        score = tempsRestant + 10
+        
         if reponseCorrecte == "2"
         {
-            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
             
             alert.show()
         }else{
@@ -218,9 +256,11 @@ class QuestionViewController: UIViewController {
     
     func reponse3 (sender: UIButton!){
         
+        score = tempsRestant + 10
+        
         if reponseCorrecte == "3"
         {
-            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
             
             alert.show()
         }else{
@@ -236,9 +276,11 @@ class QuestionViewController: UIViewController {
     
     func reponse4 (sender: UIButton!){
         
+        score = tempsRestant + 10
+        
         if reponseCorrecte == "4"
         {
-            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
             
             alert.show()
         }else{
