@@ -8,8 +8,10 @@
 
 import UIKit
 
-class QuestionViewController: UIViewController {
-
+class QuestionViewController: UIViewController, UIAlertViewDelegate {
+    
+    var score:Int = 0
+    
     let question = UILabel(frame: CGRect(x: 40,y: 60,width: 343, height: 75))
     let rep1 = UIButton(frame: CGRect(x: 40,y: 200,width: 343, height: 50))
     let rep2 = UIButton(frame: CGRect(x: 40, y: 300, width: 343, height: 50))
@@ -18,12 +20,11 @@ class QuestionViewController: UIViewController {
     
     let time = UILabel(frame: CGRect(x: 190, y: 140, width: 343, height: 25))
     
-    var tempsRestant = 10
+    var tempsRestant = 11
     
     var reponseCorrecte: String = ""
     
     var myTime: Timer!
-    var score:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +34,7 @@ class QuestionViewController: UIViewController {
         let screenWidth = screenSize.width
         let screenHeight = screenSize.height
         
-        time.textColor = UIColor.white
+       time.textColor = UIColor.white
         
 
         self.navigationItem.title = "Question:"
@@ -76,8 +77,13 @@ class QuestionViewController: UIViewController {
         {
             myTime.invalidate()
             
-            var alert:UIAlertView = UIAlertView(title: "Plus de temps", message: "le temps est écoulé !!!",delegate: self, cancelButtonTitle: "OK")
-            alert.show()
+            var timeOut: UIAlertController = UIAlertController()
+            timeOut.title = "Temps écoulé"
+            timeOut.message = "Vous n'avez plus de temps !!!"
+            timeOut.addAction(timeAlert)
+            
+            // Present Alert Controller
+            self.present(timeOut, animated: true, completion: nil)
             
             time.text = "0"
             
@@ -88,7 +94,7 @@ class QuestionViewController: UIViewController {
     //Question random
     func randomQuestion(){
         
-        
+        timer()
         var randomNumber = arc4random() % 4
         randomNumber += 1
         
@@ -114,7 +120,7 @@ class QuestionViewController: UIViewController {
             rep3.backgroundColor = UIColor.white
             
             
-            rep4.setTitle("L'Italie", for: UIControlState.normal)
+            rep4.setTitle("La Belgique", for: UIControlState.normal)
             rep4.setTitleColor(UIColor.black, for: .normal)
             rep4.backgroundColor = UIColor.white
             
@@ -162,7 +168,7 @@ class QuestionViewController: UIViewController {
             rep1.backgroundColor = UIColor.white
             
             
-            rep2.setTitle("L'Angleterre", for: UIControlState.normal)
+            rep2.setTitle("le Portugal", for: UIControlState.normal)
             rep2.setTitleColor(UIColor.black, for: .normal)
             rep2.backgroundColor = UIColor.white
             
@@ -222,75 +228,143 @@ class QuestionViewController: UIViewController {
         
         if reponseCorrecte == "1"
         {
-          var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
+            myTime.invalidate()
+
+            var bon:UIAlertController = UIAlertController()
+            bon.title = "Bonne réponse"
+            bon.message = "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points"
+            bon.addAction(goodReponse)
             
-            alert.show()
+            // Present Alert Controller
+            self.present(bon, animated: true, completion: nil)
+            
+            randomQuestion()
             
         }else{
+            myTime.invalidate()
+
             
-            var alert:UIAlertView = UIAlertView(title: "Mauvaise Réponse", message: "C'est pas la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+            var mauvais:UIAlertController = UIAlertController()
+            mauvais.title = "Mauvaise réponse"
+            mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
+            mauvais.addAction(wrongReponse)
             
-            alert.show()
+            self.present(mauvais, animated: true, completion: nil)
+            randomQuestion()
+            
         }
 
     }
 
     func reponse2 (sender: UIButton!){
-        
+      
         score = tempsRestant + 10
         
         if reponseCorrecte == "2"
         {
-            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
+            myTime.invalidate()
             
-            alert.show()
+            var bon:UIAlertController = UIAlertController()
+            bon.title = "Bonne réponse"
+            bon.message = "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points"
+            bon.addAction(goodReponse)
+            
+            // Present Alert Controller
+            self.present(bon, animated: true, completion: nil)
+            randomQuestion()
+            
         }else{
+            myTime.invalidate()
+
             
-            var alert:UIAlertView = UIAlertView(title: "Mauvaise Réponse", message: "C'est pas la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+            var mauvais:UIAlertController = UIAlertController()
+            mauvais.title = "Mauvaise réponse"
+            mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
+            mauvais.addAction(wrongReponse)
             
-            alert.show()
+            self.present(mauvais, animated: true, completion: nil)
+            
+            randomQuestion()
+
         }
 
         
     }
     
     func reponse3 (sender: UIButton!){
-        
+   
         score = tempsRestant + 10
         
         if reponseCorrecte == "3"
         {
-            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
+            myTime.invalidate()
+
+            var bon:UIAlertController = UIAlertController()
+            bon.title = "Bonne réponse"
+            bon.message = "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points"
+            bon.addAction(goodReponse)
             
-            alert.show()
-        }else{
+            // Present Alert Controller
+            self.present(bon, animated: true, completion: nil)
+            randomQuestion()
             
+           }else{
+            myTime.invalidate()
+
+            var mauvais:UIAlertController = UIAlertController()
+            mauvais.title = "Mauvaise réponse"
+            mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
+            mauvais.addAction(wrongReponse)
             
-            var alert:UIAlertView = UIAlertView(title: "Mauvaise Réponse", message: "C'est pas la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+            self.present(mauvais, animated: true, completion: nil)
             
-            alert.show()
+            randomQuestion()
         }
 
        
     }
     
     func reponse4 (sender: UIButton!){
-        
+
         score = tempsRestant + 10
         
         if reponseCorrecte == "4"
         {
-            var alert:UIAlertView = UIAlertView(title: "Bonne Réponse", message: "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points",delegate: self, cancelButtonTitle: "OK")
+            myTime.invalidate()
+
+            var bon:UIAlertController = UIAlertController()
+            bon.title = "Bonne réponse"
+            bon.message = "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points"
+            bon.addAction(goodReponse)
             
-            alert.show()
+            // Present Alert Controller
+            self.present(bon, animated: true, completion: nil)
+            randomQuestion()
+
         }else{
+            myTime.invalidate()
+
+            var mauvais:UIAlertController = UIAlertController()
+            mauvais.title = "Mauvaise réponse"
+            mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
+            mauvais.addAction(wrongReponse)
             
-            var alert:UIAlertView = UIAlertView(title: "Mauvaise Réponse", message: "C'est pas la bonne réponse !!!",delegate: self, cancelButtonTitle: "OK")
+            self.present(mauvais, animated: true, completion: nil)
             
-            alert.show()
-        }
+            randomQuestion()
+         }
+    }
+    
+    let timeAlert = UIAlertAction(title: "OK", style: .default){ (action) -> Void in
+      
     }
 
+    let goodReponse = UIAlertAction(title: "OK", style: .default){ (action) -> Void in
+  
+    }
+    let wrongReponse = UIAlertAction(title: "OK", style: .default){ (action) -> Void in
+       
+    }
     /*
     // MARK: - Navigation
 
