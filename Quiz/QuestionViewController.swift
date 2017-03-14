@@ -10,17 +10,20 @@ import UIKit
 
 class QuestionViewController: UIViewController, UIAlertViewDelegate {
     
+    
+    var arrayScore: [Int] = []
     var score:Int = 0
     
-    let question = UILabel(frame: CGRect(x: 40,y: 60,width: 343, height: 75))
-    let rep1 = UIButton(frame: CGRect(x: 40,y: 200,width: 343, height: 50))
-    let rep2 = UIButton(frame: CGRect(x: 40, y: 300, width: 343, height: 50))
-    let rep3 = UIButton(frame: CGRect(x:40, y: 400, width: 343, height: 50))
-    let rep4 = UIButton(frame: CGRect(x: 40, y: 500, width: 343, height: 50))
+    let question = UILabel(frame: CGRect(x: 40,y: 100,width: 343, height: 75))
+    let rep1 = UIButton(frame: CGRect(x: 40,y: 250,width: 343, height: 50))
+    let rep2 = UIButton(frame: CGRect(x: 40, y: 350, width: 343, height: 50))
+    let rep3 = UIButton(frame: CGRect(x:40, y: 450, width: 343, height: 50))
+    let rep4 = UIButton(frame: CGRect(x: 40, y: 550, width: 343, height: 50))
     
-    let time = UILabel(frame: CGRect(x: 190, y: 140, width: 343, height: 25))
+    let time = UILabel(frame: CGRect(x: 190, y: 190, width: 343, height: 25))
+    let Score = UILabel(frame: CGRect(x: 150, y: 60, width: 343, height: 50))
     
-    var tempsRestant = 11
+    var tempsRestant = 10
     
     var reponseCorrecte: String = ""
     
@@ -43,11 +46,12 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
         myTime = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(QuestionViewController.timer), userInfo: nil, repeats: true)
 
         randomQuestion()
+        Score.textColor = UIColor.white
         
-       rep1.addTarget(self, action: #selector(reponse1), for: .touchUpInside)
-       rep2.addTarget(self, action: #selector(reponse2), for: .touchUpInside)
-       rep3.addTarget(self, action: #selector(reponse3), for: .touchUpInside)
-       rep4.addTarget(self, action: #selector(reponse4), for: .touchUpInside)
+        rep1.addTarget(self, action: #selector(reponse1), for: .touchUpInside)
+        rep2.addTarget(self, action: #selector(reponse2), for: .touchUpInside)
+        rep3.addTarget(self, action: #selector(reponse3), for: .touchUpInside)
+        rep4.addTarget(self, action: #selector(reponse4), for: .touchUpInside)
 
         self.view.addSubview(rep1)
         self.view.addSubview(rep2)
@@ -57,6 +61,8 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
         self.view.addSubview(time)
         
         self.view.addSubview(question)
+        
+        self.view.addSubview(Score)
 
         view.backgroundColor = UIColor.black
     }
@@ -87,6 +93,8 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             time.text = "0"
             
+            timer()
+           
         }
         
     }
@@ -94,7 +102,6 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
     //Question random
     func randomQuestion(){
         
-        timer()
         var randomNumber = arc4random() % 4
         randomNumber += 1
         
@@ -221,15 +228,30 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
         }
     }
     
+    //Fonction pour calculer le score de l'utilisateur
+    func calculScore(){
+    
+        var scoreTotal: Int = 0
+        
+        arrayScore.append(score)
+        
+        for score in arrayScore
+        {
+            scoreTotal += score
+            
+            Score.text = "Score: \(scoreTotal)"
+        }
+    }
+    
     //Action des 4 boutons
     func reponse1 (sender: UIButton!){
         
-        score = tempsRestant + 10
         
         if reponseCorrecte == "1"
         {
-            myTime.invalidate()
-
+            
+            score = tempsRestant + 10
+            
             var bon:UIAlertController = UIAlertController()
             bon.title = "Bonne réponse"
             bon.message = "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points"
@@ -238,12 +260,17 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             // Present Alert Controller
             self.present(bon, animated: true, completion: nil)
             
+            calculScore()
+            
             randomQuestion()
             
-        }else{
-            myTime.invalidate()
-
+            tempsRestant = 10
             
+            timer()
+            
+        }else{
+            
+            rep1.backgroundColor = UIColor.red
             var mauvais:UIAlertController = UIAlertController()
             mauvais.title = "Mauvaise réponse"
             mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
@@ -251,6 +278,10 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             self.present(mauvais, animated: true, completion: nil)
             randomQuestion()
+            
+            tempsRestant = 10
+            
+            timer()
             
         }
 
@@ -258,11 +289,11 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
 
     func reponse2 (sender: UIButton!){
       
-        score = tempsRestant + 10
+        
         
         if reponseCorrecte == "2"
         {
-            myTime.invalidate()
+            score = tempsRestant + 10
             
             var bon:UIAlertController = UIAlertController()
             bon.title = "Bonne réponse"
@@ -271,12 +302,17 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             // Present Alert Controller
             self.present(bon, animated: true, completion: nil)
+            
+            calculScore()
+            
             randomQuestion()
+            
+            tempsRestant = 10
+            
+            timer()
             
         }else{
             myTime.invalidate()
-
-            
             var mauvais:UIAlertController = UIAlertController()
             mauvais.title = "Mauvaise réponse"
             mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
@@ -284,7 +320,9 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             self.present(mauvais, animated: true, completion: nil)
             
-            randomQuestion()
+            tempsRestant = 10
+            
+            timer()
 
         }
 
@@ -292,13 +330,10 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
     }
     
     func reponse3 (sender: UIButton!){
-   
-        score = tempsRestant + 10
-        
         if reponseCorrecte == "3"
         {
-            myTime.invalidate()
-
+            score = tempsRestant + 10
+            
             var bon:UIAlertController = UIAlertController()
             bon.title = "Bonne réponse"
             bon.message = "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points"
@@ -306,11 +341,17 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             // Present Alert Controller
             self.present(bon, animated: true, completion: nil)
+            
+            calculScore()
+            
             randomQuestion()
             
+            tempsRestant = 10
+            
+            timer()
+            
            }else{
-            myTime.invalidate()
-
+            
             var mauvais:UIAlertController = UIAlertController()
             mauvais.title = "Mauvaise réponse"
             mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
@@ -319,6 +360,11 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             self.present(mauvais, animated: true, completion: nil)
             
             randomQuestion()
+            
+            
+            tempsRestant = 10
+            
+            timer()
         }
 
        
@@ -330,8 +376,6 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
         
         if reponseCorrecte == "4"
         {
-            myTime.invalidate()
-
             var bon:UIAlertController = UIAlertController()
             bon.title = "Bonne réponse"
             bon.message = "Vous avez trouvé la bonne réponse et vous avez marqué \(score) points"
@@ -340,10 +384,14 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             // Present Alert Controller
             self.present(bon, animated: true, completion: nil)
             randomQuestion()
+            calculScore()
+            
+            tempsRestant = 10
+            
+            timer()
 
         }else{
-            myTime.invalidate()
-
+            
             var mauvais:UIAlertController = UIAlertController()
             mauvais.title = "Mauvaise réponse"
             mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
@@ -352,6 +400,11 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             self.present(mauvais, animated: true, completion: nil)
             
             randomQuestion()
+            
+            
+            tempsRestant = 10
+            
+            timer()
          }
     }
     
