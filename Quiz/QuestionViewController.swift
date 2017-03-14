@@ -82,7 +82,6 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
     if tempsRestant == 0
         {
             myTime.invalidate()
-            
             var timeOut: UIAlertController = UIAlertController()
             timeOut.title = "Temps écoulé"
             timeOut.message = "Vous n'avez plus de temps !!!"
@@ -93,8 +92,15 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             time.text = "0"
             
+            tempsRestant = 10
+            
+            
             timer()
-           
+            
+            randomQuestion()
+            
+            score = 0
+            
         }
         
     }
