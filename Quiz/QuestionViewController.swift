@@ -81,7 +81,6 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
         
     if tempsRestant == 0
         {
-            myTime.invalidate()
             var timeOut: UIAlertController = UIAlertController()
             timeOut.title = "Temps écoulé"
             timeOut.message = "Vous n'avez plus de temps !!!"
@@ -92,15 +91,14 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             time.text = "0"
             
-            tempsRestant = 10
-            
-            
-            timer()
-            
-            randomQuestion()
-            
             score = 0
             
+            calculScore()
+            
+            tempsRestant = 10
+            
+            randomQuestion()
+
         }
         
     }
@@ -275,14 +273,16 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             timer()
             
         }else{
-            
-            rep1.backgroundColor = UIColor.red
             var mauvais:UIAlertController = UIAlertController()
             mauvais.title = "Mauvaise réponse"
             mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
             mauvais.addAction(wrongReponse)
             
             self.present(mauvais, animated: true, completion: nil)
+            
+            score = 0
+            calculScore()
+            
             randomQuestion()
             
             tempsRestant = 10
@@ -318,13 +318,19 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             timer()
             
         }else{
-            myTime.invalidate()
+            
             var mauvais:UIAlertController = UIAlertController()
             mauvais.title = "Mauvaise réponse"
             mauvais.message = "Vous n'avez pas trouvé la bonne réponse"
             mauvais.addAction(wrongReponse)
             
             self.present(mauvais, animated: true, completion: nil)
+            
+            score = 0
+            
+            calculScore()
+            
+            randomQuestion()
             
             tempsRestant = 10
             
@@ -365,13 +371,15 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             self.present(mauvais, animated: true, completion: nil)
             
-            randomQuestion()
+            score = 0
             
+            calculScore()
+            
+            randomQuestion()
             
             tempsRestant = 10
             
-            timer()
-        }
+      }
 
        
     }
@@ -405,8 +413,11 @@ class QuestionViewController: UIViewController, UIAlertViewDelegate {
             
             self.present(mauvais, animated: true, completion: nil)
             
-            randomQuestion()
+            score = 0
             
+            calculScore()
+            
+            randomQuestion()
             
             tempsRestant = 10
             
